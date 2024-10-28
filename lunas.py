@@ -720,42 +720,40 @@ def send_to_linux(nFilePath, patient_name, outputfolder, wslfolder, roiftfolder)
     return
 
 
-def ROIFT(roiftfolder, mcubesfolder, segmentationfolder, patient_name, percentile, nitter, mode, pol):
+def ROIFT(roiftfolder, mcubesfolder, segmentationfolder, patient_name, percentile, nitter, pol):
     print("perc: ", percentile)
 
-    # mkdir_p(segmentationfolder)
-    # print("Trachea ROIFT...")
-    # file = "wsl " + roiftfolder + 'oiftrelax' + " " + roiftfolder + patient_name + ".nii" + " " + roiftfolder + "airways-" + patient_name + '.txt ' + str(-1.0) + ' 0' + ' ' + str(percentile)
-    # p = subprocess.run(file, shell=True)
-    # trachea_nifti = nib.load("label.nii.gz")
-    # afim = trachea_nifti.affine
-    # trachea_array = np.array(trachea_nifti.dataobj)
-    # nib.loadsave.save(nib.Nifti1Image(trachea_array.astype(np.int16), afim), segmentationfolder + "airways-" + patient_name + ".nii")
-    # read_label("airways-" + patient_name, mcubesfolder + nitter + patient_name)
+    mkdir_p(segmentationfolder)
+    print("Trachea ROIFT...")
+    file = "wsl " + roiftfolder + 'oiftrelax' + " " + roiftfolder + patient_name + ".nii" + " " + roiftfolder + "airways-" + patient_name + '.txt ' + str(-1.0) + ' 0' + ' ' + str(percentile)
+    p = subprocess.run(file, shell=True)
+    trachea_nifti = nib.load("label.nii.gz")
+    afim = trachea_nifti.affine
+    trachea_array = np.array(trachea_nifti.dataobj)
+    nib.loadsave.save(nib.Nifti1Image(trachea_array.astype(np.int16), afim), segmentationfolder + "airways-" + patient_name + ".nii")
+    read_label("airways-" + patient_name, mcubesfolder + nitter + patient_name)
 
-    # print("Left Lung ROIFT...")
-    # file = "wsl " + roiftfolder + 'oiftrelax' + " " + roiftfolder + patient_name + ".nii" + " " + roiftfolder + "lungs_L-" + patient_name + '.txt ' + str(-pol) + ' ' + nitter + ' ' + str(percentile)
-    # p = subprocess.run(file, shell=True)
-    # right_nifti = nib.load("label.nii.gz")
-    # afim = right_nifti.affine
-    # right_array = np.array(right_nifti.dataobj)
-    # # right_array -= trachea_array
-    # right_array[right_array < 0] = 0
-    # nib.loadsave.save(nib.Nifti1Image(right_array.astype(np.int16), afim), segmentationfolder + "lungs_left-" + patient_name + ".nii")
-    # read_label("lungs_left-" + patient_name, mcubesfolder + nitter + patient_name)
+    print("Left Lung ROIFT...")
+    file = "wsl " + roiftfolder + 'oiftrelax' + " " + roiftfolder + patient_name + ".nii" + " " + roiftfolder + "lungs_L-" + patient_name + '.txt ' + str(-pol) + ' ' + nitter + ' ' + str(percentile)
+    p = subprocess.run(file, shell=True)
+    right_nifti = nib.load("label.nii.gz")
+    afim = right_nifti.affine
+    right_array = np.array(right_nifti.dataobj)
+    # right_array -= trachea_array
+    right_array[right_array < 0] = 0
+    nib.loadsave.save(nib.Nifti1Image(right_array.astype(np.int16), afim), segmentationfolder + "lungs_left-" + patient_name + ".nii")
+    read_label("lungs_left-" + patient_name, mcubesfolder + nitter + patient_name)
 
-    # print("Right Lung ROIFT...")
-    # file = "wsl " + roiftfolder + 'oiftrelax' + " " + roiftfolder + patient_name + ".nii" + " " + roiftfolder + "lungs_R-" + patient_name + '.txt ' + str(-pol) + ' ' + nitter + ' ' + str(percentile)
-    # p = subprocess.run(file, shell=True)
-    # left_nifti = nib.load("label.nii.gz")
-    # afim = left_nifti.affine
-    # left_array = np.array(left_nifti.dataobj)
-    # # left_array -= trachea_array
-    # left_array[left_array < 0] = 0
-    # nib.loadsave.save(nib.Nifti1Image(left_array.astype(np.int16), afim), segmentationfolder + "lungs_right-" + patient_name + ".nii")
-    # read_label("lungs_right-" + patient_name, mcubesfolder + nitter + patient_name)
-
-
+    print("Right Lung ROIFT...")
+    file = "wsl " + roiftfolder + 'oiftrelax' + " " + roiftfolder + patient_name + ".nii" + " " + roiftfolder + "lungs_R-" + patient_name + '.txt ' + str(-pol) + ' ' + nitter + ' ' + str(percentile)
+    p = subprocess.run(file, shell=True)
+    left_nifti = nib.load("label.nii.gz")
+    afim = left_nifti.affine
+    left_array = np.array(left_nifti.dataobj)
+    # left_array -= trachea_array
+    left_array[left_array < 0] = 0
+    nib.loadsave.save(nib.Nifti1Image(left_array.astype(np.int16), afim), segmentationfolder + "lungs_right-" + patient_name + ".nii")
+    read_label("lungs_right-" + patient_name, mcubesfolder + nitter + patient_name)
 
     print("Ribs ROIFT...")
     file = "wsl " + roiftfolder + 'oiftrelax_2gb_1dc' + " " + roiftfolder + "ribs-" + patient_name + ".nii" + " " + roiftfolder + "ribs-" + patient_name + '.txt' + ' 1.0 ' + nitter + ' ' + str(percentile)
@@ -875,11 +873,11 @@ def main():
     start = time.process_time()
     dataset = int(input("1 - LOLA, 2 - LCTSC, 3 - fator 4, 4 - VIA ELCAP, 5 = EXACT: "))
     # Pasta que contem pasta de oiftrelax, imagens originais e gabarito
+
     inputfolder = "C:/Users/" + os.path.join(os.getlogin()) + "/OneDrive/Documentos/Poli/IC/"
     # roift path
-    linuxfolder = "~/Documents/IC/"
-    roiftfolder = linuxfolder + "MSales21_3D/"
-
+    roiftfolder = "/mnt/c/Users/" + os.getcwd().replace("C:\\Users\\", "").replace("\\", "/") + "/"
+    print(roiftfolder)
     datasets = ['LOLA', 'LCTSC', 'fator_4', 'VIAELCAP', 'EXACT']
     dataset = datasets[dataset-1]
 
@@ -887,94 +885,28 @@ def main():
     wslfolder = "/mnt/c/Users/" + outputfolder.replace("C:/Users/", "")
     mkdir_p(outputfolder)
     mkdir_p(wslfolder)
-    originalfolder = inputfolder + "Dataset/" + dataset + "/"
     mcubesfolder = inputfolder + "STL/" + dataset + "/"
-    answerfolder = inputfolder + "Gabarito/" + dataset + "/"
     segmentationfolder = inputfolder + "Segmented/" + dataset + "/"
-    if dataset == "LCTSC": arq = "lista" + dataset + ".txt" 
-    else: arq = "lista" + dataset + ".txt"
-    txt_names = ["results_" + dataset]
-    mode = '2gb_1dc'
+    print()
 
-    arquive = search_dir_dcm(inputfolder + "DatasetLists/" + arq)
+    nifti_file = input("Nifti Path: ")
+    patient_name = os.path.basename(nifti_file).replace(".nii", "")
+    
+    print("Patient: " + patient_name)
 
-    # no intervalo, escolher entre 1 a 24
-    a = int(input("1 - Specific patients, 2 - Interval: "))
+    try:
+        SEED_GEN(nifti_file, outputfolder, patient_name)
+        send_to_linux(nifti_file, patient_name, outputfolder, wslfolder, roiftfolder)
+        pol = 0.1
+        percs = [90]
+        for perc in percs:
+            ROIFT(roiftfolder, mcubesfolder, segmentationfolder, patient_name, perc, 10, pol)
+        remove_files(patient_name, roiftfolder, wslfolder, outputfolder, segmentationfolder)
 
-    if a == 1:
-        while True:
-            ex = str(input("Just: "))
-            exc = ex.split(",")
-            exc = str_to_list(exc)
-            print("Just these patients?")
-            for o in exc:
-                print(arquive[o-1].replace('\n','').replace(inputfolder.replace('/','\\'),'').replace('\\','-'))
-            p = int(input("1 - Yes, 2 - No: "))
-            if p == 1:
-                n = exc[0]
-                m = exc[-1]
-                aux = list(range(n,m))
-                exc = np.setdiff1d(aux,exc)
-                n -=1
-                break
-        print()
-    elif a == 2:
-        n = int(input("Start: "))
-        m = int(input("Stop: "))
-        n -= 1
-        while True:
-            ex = str(input("Except: "))
-            if ex == "":
-                exc = []
-                break
-            exc = ex.split(",")
-            exc = str_to_list(exc)
-            print("Except these patients?")
-            for o in exc:
-                print(arquive[o-1].replace('\n','').replace(inputfolder.replace('/','\\'),'').replace('\\','-'))
-            p = int(input("1 - Yes, 2 - No: "))
-            if p == 1:
-                break
-        print()
-
-    relaxs = [0, 10]
-    # Relax parameter
-    for j in relaxs:
-        for txt_name in txt_names:
-            notepad_dil = open(inputfolder + "Results/" + txt_name + "it{}.txt".format(j), "w")
-            counter = 1
-            for i in range(n,m):
-                if (i+1) not in exc:
-                    input_name = arquive[i].replace('\n','')
-                    patient_name = input_name.replace('NIFTI_SEEDS\\','')
-                    nifti_file = originalfolder + patient_name + ".nii"
-                    patient_name = dataset + "-" + patient_name
-                    print("Patient {}/{}: ".format(counter,m-n) + patient_name)
-
-                    try:
-                        SEED_GEN(nifti_file, outputfolder, patient_name)
-                        send_to_linux(nifti_file, patient_name, outputfolder, wslfolder, roiftfolder)
-                        pol = 0.1
-                        percs = [90]
-                        for perc in percs:
-                            ROIFT(roiftfolder, mcubesfolder, segmentationfolder, patient_name, perc, str(j), mode, pol)
-                            # if dataset == "LOLA" or dataset == "VIAELCAP" or dataset == "EXACT" or dataset == "LCTSC":
-                            #     patient_name = patient_name.replace(dataset + "-", '')
-                            #     VAL(answerfolder, segmentationfolder, notepad_dil, patient_name, dataset)
-                        remove_files(patient_name, roiftfolder, wslfolder, outputfolder, segmentationfolder)
-
-                    except ZeroDivisionError as e:
-                        # Print the exception error
-                        print("An exception occurred:", e)
-                    counter += 1
-
-
-        notepad_dil.close()
-
-    # mean_accs(inputfolder + "Results/v3/", "results_EXACTit0.txt")
-    # mean_accs(inputfolder + "Results/v3/", "results_viaelcapit0.txt")
-    # mean_accs(inputfolder + "Results/v3/", "results_lolait0.txt")
-    # mean_accs(inputfolder + "Results/v3/", "results_LCTSCit0.txt")
+    except ZeroDivisionError as e:
+        # Print the exception error
+        print("An exception occurred:", e)
+    counter += 1
 
     print("Done.")
     print("Time: {}".format(time.process_time() - start))
