@@ -1,4 +1,10 @@
 # Lung automatic seeding and segmentation
+LUNg Automatic Seeding and Segmentation (LUNAS) is a automatic seed-based method segmentation for CT thorax images. The regions available for segmentation are:
+- Right and left lungs
+- Trachea
+- Rib
+- Skin
+
 
 ## Referencing and citing
 
