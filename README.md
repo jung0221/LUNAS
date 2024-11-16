@@ -76,11 +76,11 @@ sudo apt-get install libz-dev
 
 As output, the program generates the label image of the resulting segmentation in file **"segm_altis.nii.gz"** in the **"out"** subfolder, when **output_type** is zero.
 
-### Program execution examples of ALTIS:
+### Program execution examples of LUNAS:
 
-#### To execute the ALTIS method:
+#### To execute the LUNAS method:
 
-The following command computes the segmentation by ALTIS for the volume in the hypothetical file **"example01.nii.gz"**.
+The following command computes the segmentation by LUNAS for the volume in the hypothetical file **"example01.nii.gz"**.
 
 ```
 ./altis example01.nii.gz 0
@@ -92,38 +92,7 @@ The following command computes the segmentation by ALTIS for the volume in the h
 ./altis example01.nii.gz 0 T=200
 ```
 
-
-### usage of ALTIS + ROIFT:
-
-```
-usage:
-altis_roift <volume> [T=value] [left=file] [right=file]
-Optional parameters:
-	T................... threshold integer value
-	                     (if not specified Otsu is used).
-	left................ ground truth for left lung.
-	right............... ground truth for right lung.
-```
-
-As output, the program generates improved segmentations of the left and right lungs, respectively, in the files **"segm_left_lung.nii.gz"** and **"segm_right_lung.nii.gz"** in the **"out"** subfolder.
-
-### Program execution examples of ALTIS + ROIFT:
-
-#### To execute seed generation by ALTIS and delineation by ROIFT:
-
-
-The following command computes the segmentation of the lungs with seeds by ALTIS and delineation by ROIFT for the volume in the hypothetical file **"example01.nii.gz"**.
-
-```
-./altis_roift example01.nii.gz
-```
-
-
-The following command computes the segmentation of the lungs with seeds by ALTIS and delineation by ROIFT for the volume in the hypothetical file **"example01.nii.gz"**, using a fixed threshold of 200 on the residual image, instead of the default threshold defined as a percentage above Otsu's threshold.
-
-```
-./altis_roift example01.nii.gz T=200
-```
+d
 
 ## Referencing and citing
 If you are working with this code to your project, please refer to:
