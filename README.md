@@ -22,8 +22,6 @@ The following command computes the segmentation by LUNAS for the volume in the h
 ```
 python lunas.py --patient "example01.nii" --pol "0.1" --dilperc "90" --iters "10"
 ```
-```
-```
 
 ### Parameters
 
@@ -66,6 +64,12 @@ This step involves generating internal and external seeds for lung segmentation,
 
 ### 2. Relaxed Oriented Image Foresting Transform
 
+The Oriented Image Foresting Transform (OIFT) combines concepts from Image Foresting Transform (IFT), General Fuzzy Connectedness (GFC), and Generalized Graph Cut (GGC). It inherits key properties from these frameworks, such as robustness to seed placement. OIFT minimizes a specific energy function to compute an optimal partition that separates object and background regions on a symmetric digraph. It incorporates boundary polarity by assigning orientation-sensitive weights to arcs, allowing segmentation to favor either dark objects in bright backgrounds or the opposite, depending on the parameter settings.
+
+Relaxation Procedure
+The Relaxed Oriented Image Foresting Transform (ROIFT) extends OIFT by introducing an iterative relaxation process. Starting from an initial segmentation produced by OIFT, a sequence of progressively refined fuzzy segmentations is computed. This iterative approach adjusts arc weights dynamically, reflecting directed behavior. The final segmentation is determined by converting the fuzzy segmentation into a binary result.
+
+The iterative relaxation smooths irregularities in the segmentation contours, improving both accuracy and visual quality compared to the original OIFT and related methods. Additionally, the approach balances the strengths of OIFT and Random Walks (RW), offering hybrid results that better align with human perception.
 
 ### Datasets used for evaluation
 
