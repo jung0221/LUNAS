@@ -15,41 +15,43 @@ cd LUNAS
 pip install -r requirements.txt
 ```
 
-Usage
+## Usage
 
 To run the segmentation process, use the following command:
 
 ```python lunas_segmentation.py --input <path_to_ct_image> --output <path_to_output_image>
 ```
 
-Parameters
+### Parameters
 
 - --input: Path to the input CT image file.
 
 - --output: Path where the segmented output image will be saved.
 
-Datasets
+## Method
+
+1. Automatic Seed Generator
+This step involves generating internal and external seeds for lung segmentation, targeting specific regions of interest (lungs, trachea, ribs). The process includes:
+
+- Thresholding: Identifying potential regions by applying intensity thresholds specific to the lungs, ribs, and trachea.
+- Noise Removal: Cleaning binary images to remove irrelevant components like hospital bed artifacts.
+- 2D Sampling: Extracting slices along the transverse plane for each region, considering spatial relationships and anatomical features.
+- Seed Extraction: Identifying connected components, calculating their centers, and expanding seeds for better coverage.
+- Verification: Validating seeds based on their position relative to anatomical structures, ensuring accuracy.
+- Side Classification: Categorizing lung seeds as left or right based on trachea position and axial slice analysis.
+
+### Datasets used for evaluation
 
 LUNAS has been evaluated on several datasets, including:
 
-- LCTSC: Lung CT Segmentation Challenge dataset.
+- LCTSC (Lung CT Segmentation Challenge dataset): A comprehensive resource for evaluation, chosen for its complexity and clinical significance. It encompasses 60 images with a variety of benign and malignant pulmonary lesion patterns, covering a wide range of pathological conditions. This diversity closely mirrors the real-world scenarios encountered by healthcare providers, establishing it as a suitable benchmark to evaluate the effectiveness and reliability of segmentation algorithms in clinical applications (https://doi.org/10.7937/K9/TCIA.2017.3R3FVZ08).
 
-- LOLA11: LObe and Lung Analysis 2011 dataset.
+- LOLA11 (LObe and Lung Analysis 2011): LOLA11 provides 55 images of chest CT scans with varying abnormalities for which reference standards of lung and lobe segmentation have been established. (https://lola11.grand-challenge.org/). 
 
-- EXACT: Extraction of Airways from CT dataset.
+- EXACT (Extraction of Airways from CT 2009): The goal of the EXACT study is to compare algorithms to extract the airway tree from chest CT scans using a common dataset with 40 images and a performance evaluation method (https://doi.org/10.1109/TMI.2012.2209674).
 
+- VIA/I-ELCAP (Vision and Image Analysis Group/International Early Lung Cancer Action Program): 50 CT scans were obtained in a single breath hold with a slice thickness of 1.25 mm. The locations of the nodules detected by the radiologist are also provided in this dataset (http://www.via.cornell.edu/lungdb.html).
 
-**[1]** Sousa AM, Martins SB, Falc&atilde;o AX, Reis F, Bagatin E, Irion K,
-Med Phys. 2019 Nov; 46(11):4970-4982; doi: [10.1002/mp.13773](https://doi.org/10.1002/mp.13773).
-
-**[2]** Yang, J., Sharp, G., Veeraraghavan, H., Van Elmpt, W., Dekker, A., Lustberg, T., & Gooding, M. (2017). Data from Lung CT Segmentation Challenge (LCTSC) (Version 3) [Data set]. The Cancer Imaging Archive. doi: [10.7937/K9/TCIA.2017.3R3FVZ08](https://doi.org/10.7937/K9/TCIA.2017.3R3FVZ08).
-
-**[3]** Caio L. Demario, Paulo A.V. Miranda, RELAXED ORIENTED IMAGE FORESTING TRANSFORM FOR SEEDED IMAGE SEGMENTATION, 26th IEEE International Conference on Image Processing (ICIP). Sep 2019; Taipei, Taiwan, pp. 1520-1524; doi: [10.1109/ICIP.2019.8803080](http://dx.doi.org/10.1109/ICIP.2019.8803080).
-
-
-If you are working with this code to your project, in addition to referencing **[1]**, please also cite:
-
-> Choi J., Condori M. A. T., Miranda P. A. V. and Tsuzuki M. S. G. Lung automatic seeding and segmentation: a robust method based on relaxed oriented image foresting transform.
 
 ## Authors
 
@@ -62,15 +64,15 @@ This particular code was implemented by:
 
 ## Source code
 
-The source code was implemented in Python and C/C++ language, compiled with gcc 9.4.0, and tested on a Linux operating system (Ubuntu 20.04.5 LTS 64-bit), running on an Intel® Core™ i5-10210U CPU @ 1.60GHz × 8 machine. 
+The source code was implemented in Python and C/C++ language, compiled with gcc 9.4.0, and tested on a Linux operating system (Ubuntu 20.04.5 LTS 64-bit), running on an Intel® Core™ I7-12700 CPU @ 4.90GHz × 8 machine. 
 The code natively supports volumes in the NIfTI format.
 
-
-
 To compile the program, enter the folder and type **"make"**.
-If you get the error **"fatal error: zlib.h: No such file or directory"**, then you have to install the zlib package: zlib1g-dev.
+If you get the error **"fatal error: zlib.h: No such file or directory"**, then you have to install the zlib package:
 
-
+```
+sudo apt-get install libz-dev
+```
 
 As output, the program generates the label image of the resulting segmentation in file **"segm_altis.nii.gz"** in the **"out"** subfolder, when **output_type** is zero.
 
