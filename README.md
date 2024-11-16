@@ -13,12 +13,14 @@ To use LUNAS, clone this repository and install the required dependencies.
 git clone https://github.com/jung0221/LUNAS.git
 cd LUNAS
 pip install -r requirements.txt
+```
 
 Usage
 
 To run the segmentation process, use the following command:
 
-python lunas_segmentation.py --input <path_to_ct_image> --output <path_to_output_image>
+```python lunas_segmentation.py --input <path_to_ct_image> --output <path_to_output_image>
+```
 
 Parameters
 
