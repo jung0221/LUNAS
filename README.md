@@ -30,7 +30,7 @@ To run the segmentation process, use the following command:
 
 ## Method
 
-1. Automatic Seed Generator
+### 1. Automatic Seed Generator
 This step involves generating internal and external seeds for lung segmentation, targeting specific regions of interest (lungs, trachea, ribs). The process includes:
 
 - Thresholding: Identifying potential regions by applying intensity thresholds specific to the lungs, ribs, and trachea.
