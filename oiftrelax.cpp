@@ -109,7 +109,7 @@ int main(int argc, char **argv) {
     pol = atof(argv[3]);
     niter = atoi(argv[4]);
     percentile = atoi(argv[5]);
-    printf("pol: %f, niter: %d\n", pol, niter);
+    // printf("pol: %f, niter: %d\n", pol, niter);
 
     fp = fopen(argv[2], "r");
     if (fp == NULL) {
@@ -172,7 +172,7 @@ int main(int argc, char **argv) {
 
     end = clock();
     totaltime = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Time: %f sec\n", totaltime);
+    //printf("Time: %f sec\n", totaltime);
 
     gft::Scene32::Write(label, (char *)"label.nii.gz");
 
