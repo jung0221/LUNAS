@@ -17,16 +17,40 @@ pip install -r requirements.txt
 
 ## Usage
 
-To run the segmentation process, use the following command:
+The following command computes the segmentation by LUNAS for the volume in the hypothetical file **"example01.nii"**.
 
-```python lunas_segmentation.py --input <path_to_ct_image> --output <path_to_output_image>
+```
+python lunas.py --patient "example01.nii" --pol "0.1" --dilperc "90" --iters "10"
+```
+```
 ```
 
 ### Parameters
 
-- --input: Path to the input CT image file.
+- --patient: Path to the Nifti file (required).
+- --mesh: Path to the mesh file (required). This parameter specifies the output path for the generated mesh file.
+- --pol: Pol value for the ROIFT method (optional, default: 0.1). This parameter controls the level of polynomial smoothing applied during the segmentation process.
+- --dilperc: Percentage value for conditional dilation (optional, default: 90). This parameter is used to improve the accuracy of the ground-truth of the datasets by applying a dilation operation conditionally.
+- --iters: Number of iterations for the ROIFT method (optional, default: 10). This parameter specifies how many iterations the ROIFT algorithm should perform.
 
-- --output: Path where the segmented output image will be saved.
+### Output
+
+The program generates several output files in the **"out"** subfolder:
+
+- **Nifti files**: The segmented parts are saved as `.nii` files in the `/out/nifti` directory. These include:
+  - `left_lung-(input_file_name).nii`
+  - `right_lung-(input_file_name).nii`
+  - `ribs-(input_file_name).nii`
+  - `skin-(input_file_name).nii`
+  - `airways-(input_file_name).nii`
+
+- **Mesh files**: If the `--mesh` parameter is provided, the program will generate `.stl` files for the segmented parts in the `/out/stl` directory. These include:
+  - `left_lung-(input_file_name).stl`
+  - `right_lung-(input_file_name).stl`
+  - `ribs-(input_file_name).stl`
+  - `skin-(input_file_name).stl`
+  - `airways-(input_file_name).stl`
+
 
 ## Method
 
@@ -39,6 +63,9 @@ This step involves generating internal and external seeds for lung segmentation,
 - Seed Extraction: Identifying connected components, calculating their centers, and expanding seeds for better coverage.
 - Verification: Validating seeds based on their position relative to anatomical structures, ensuring accuracy.
 - Side Classification: Categorizing lung seeds as left or right based on trachea position and axial slice analysis.
+
+### 2. Relaxed Oriented Image Foresting Transform
+
 
 ### Datasets used for evaluation
 
@@ -73,26 +100,6 @@ If you get the error **"fatal error: zlib.h: No such file or directory"**, then 
 ```
 sudo apt-get install libz-dev
 ```
-
-As output, the program generates the label image of the resulting segmentation in file **"segm_altis.nii.gz"** in the **"out"** subfolder, when **output_type** is zero.
-
-### Program execution examples of LUNAS:
-
-#### To execute the LUNAS method:
-
-The following command computes the segmentation by LUNAS for the volume in the hypothetical file **"example01.nii.gz"**.
-
-```
-./altis example01.nii.gz 0
-```
-
-The following command computes the segmentation by ALTIS for the volume in the hypothetical file **"example01.nii.gz"**, using a fixed threshold of 200 on the residual image, instead of the default threshold defined as a percentage above Otsu's threshold.
-
-```
-./altis example01.nii.gz 0 T=200
-```
-
-d
 
 ## Referencing and citing
 If you are working with this code to your project, please refer to:
