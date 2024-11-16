@@ -1,13 +1,13 @@
-all: altis relaxed_oift altis_roift
+all: oiftrelax
 
 #Compiladores
 CC=gcc
 CXX=g++
 
-FLAGS= -Wall -O3 -msse
+FLAGS= -Wall -O3 -lpthread -msse
 #-march=native 
 
-LINKS= -lpthread -lz -lm -fopenmp
+LINKS= -lz -lm -fopenmp
 
 #Bibliotecas
 GFTLIB  = -L./lib/gft/lib -lgft
@@ -17,17 +17,9 @@ GFTFLAGS  = -I./lib/gft/include
 libgft:
 	$(MAKE) -C ./lib/gft
 
-altis: altis.cpp libgft
+oiftrelax: oiftrelax.cpp libgft
 	$(CXX) $(FLAGS) $(GFTFLAGS) \
-	altis.cpp $(GFTLIB) -o altis $(LINKS)
-
-relaxed_oift: relaxed_oift.cpp libgft
-	$(CXX) $(FLAGS) $(GFTFLAGS) \
-	relaxed_oift.cpp $(GFTLIB) -o relaxed_oift $(LINKS)
-
-altis_roift: altis_roift.cpp libgft
-	$(CXX) $(FLAGS) $(GFTFLAGS) \
-	altis_roift.cpp $(GFTLIB) -o altis_roift $(LINKS)
+	oiftrelax.cpp $(GFTLIB) -o oiftrelax $(LINKS)
 
 clean:
-	$(RM) *~ *.o altis relaxed_oift altis_roift ./out/* ./debug/*
+	$(RM) *~ *.o oiftrelax
