@@ -20,7 +20,7 @@ pip install -r requirements.txt
 The following command computes the segmentation by LUNAS for the volume in the hypothetical file **"example01.nii"**.
 
 ```
-python lunas.py --patient "example01.nii" --mesh 1 --pol "0.1" --dilperc "90" --iters "10"
+python lunas.py --patient "example01.nii" --mesh "1" --pol "0.1" --dilperc "90" --iters "10"
 ```
 
 ### Parameters
