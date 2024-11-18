@@ -746,7 +746,7 @@ def main():
     mkdir_p("./out/stl")
     mkdir_p("./out/seeds")
     
-    # SEED_GEN(patient_name)
+    SEED_GEN(patient_name)
     adjust_output(patient_name)
     pol = args.pol
     perc = args.dilperc
