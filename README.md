@@ -77,7 +77,7 @@ LUNAS has been evaluated on several datasets, including:
 
 - LCTSC (Lung CT Segmentation Challenge dataset): A comprehensive resource for evaluation, chosen for its complexity and clinical significance. It encompasses 60 images with a variety of benign and malignant pulmonary lesion patterns, covering a wide range of pathological conditions. This diversity closely mirrors the real-world scenarios encountered by healthcare providers, establishing it as a suitable benchmark to evaluate the effectiveness and reliability of segmentation algorithms in clinical applications (https://doi.org/10.7937/K9/TCIA.2017.3R3FVZ08).
 
-- LOLA11 (LObe and Lung Analysis 2011): LOLA11 provides 55 images of chest CT scans with varying abnormalities for which reference standards of lung and lobe segmentation have been established. (https://lola11.grand-challenge.org/). 
+- LOLA11 (LObe and Lung Analysis 2011): LOLA11 provides 55 images of chest CT scans with varying abnormalities for which reference standards of lung and lobe segmentation have been established. (https://doi.org/10.5281/zenodo.4708800). 
 
 - EXACT (Extraction of Airways from CT 2009): The goal of the EXACT study is to compare algorithms to extract the airway tree from chest CT scans using a common dataset with 40 images and a performance evaluation method (https://doi.org/10.1109/TMI.2012.2209674).
 
