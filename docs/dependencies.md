@@ -5,7 +5,6 @@ This project depends on the following external components for building and runni
 - CMake (>= 3.15)
 - Microsoft Visual Studio 2022 (or newer) with C++ workload for Windows builds
 - zlib (used by NIfTI code paths)
-- (Optional) OpenMP for faster builds and parallelism
 
 Recommended local install locations (Windows examples used in this documentation):
 
