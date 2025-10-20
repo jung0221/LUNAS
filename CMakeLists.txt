@@ -9,4 +9,4 @@ option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 find_package(ZLIB)
 find_package(OpenMP QUIET)
 
-add_subdirectory(lib)
+add_subdirectory(src/roift/lib)
