@@ -103,9 +103,9 @@ namespace gft{
 	  prob->data[p] = (rcloud->prob[l])->data[p];
 	//-----------------------------------------
 
-	(asmap->disp)->d[l].axis.x = (rcloud->disp)->dx[l];
-	(asmap->disp)->d[l].axis.y = (rcloud->disp)->dy[l];
-	(asmap->disp)->d[l].axis.z = (rcloud->disp)->dz[l];
+	(asmap->disp)->d[l].axis.x = (rcloud->disp)->d[l].axis.x;
+	(asmap->disp)->d[l].axis.y = (rcloud->disp)->d[l].axis.y;
+	(asmap->disp)->d[l].axis.z = (rcloud->disp)->d[l].axis.z;
 	
 	mask = Scene32::Threshold(prob, MAX_PROB, MAX_PROB);
 	Ref.c.x = mask->xsize/2;

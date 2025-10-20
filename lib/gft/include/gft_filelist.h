@@ -7,9 +7,14 @@
 #include "gft_arraylist.h"
 #include "gft_string.h"
 
+/* glob.h is POSIX-only; use a Windows-specific implementation in the .cpp when needed */
+#if defined(_WIN32)
+  /* nothing here - implementation will use Win32 FindFirstFile in the .cpp */
+#else
 extern "C" {
 #include <glob.h>
 }
+#endif
 
 
 namespace gft{
