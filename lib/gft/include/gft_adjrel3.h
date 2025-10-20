@@ -11,6 +11,10 @@ namespace gft{
       v4si v;
       int  data[4];
       struct{ int x,y,z; } axis;
+      /* Backwards-compatible accessors for code that expects dx/dy/dz */
+      inline int dx() const { return axis.x; }
+      inline int dy() const { return axis.y; }
+      inline int dz() const { return axis.z; }
     };
 
     struct sAdjRel3 {
