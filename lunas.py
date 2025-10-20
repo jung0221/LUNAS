@@ -196,7 +196,7 @@ class Lunas:
             1,
         )
 
-    def run(self, patient_path, only_seeds=False):
+    def run(self, patient_path, store_seeds=False):
         self.patient = patient_path
         self.lunas_autoseeds = AutoSeeds(self.patient)
 
@@ -209,8 +209,14 @@ class Lunas:
                 self.right_ext_lung_seeds,
             ) = self.generate_seeds()
 
-            if not only_seeds:
-                self.run_roift()
+            self.run_roift()
+            print("[INFO] Removing temporary files")
+            if not store_seeds:
+                seed_files = glob.glob(os.path.join(self.patient_output_dir, "*.txt"))
+                for file in seed_files:
+                    os.remove(file)
+                
+                
 
             return True
 
@@ -313,7 +319,7 @@ def main():
     )
     parser.add_argument(
         "--output",
-        default="/mnt/segmentation/CT_segmented/",
+        default="lunas_output",
         help="Nifti segmentation output path",
     )
     parser.add_argument(
@@ -325,15 +331,14 @@ def main():
     parser.add_argument(
         "--iters", type=int, default=10, help="Number of iterations (default: 10)"
     )
-    parser.add_argument("--only-seeds", action="store_true", help="Only create seeds")
+    parser.add_argument("--store-seeds", action="store_true", help="Store seeds file")
 
     args = parser.parse_args()
 
     if args.patient:
         inputfolder = os.path.dirname(args.patient)
         lunas = Lunas(inputfolder=inputfolder, outputfolder=args.output)
-        lunas.run(patient_path=args.patient, only_seeds=args.only_seeds)
-        # lunas.second_segment()
+        lunas.run(patient_path=args.patient, store_seeds=args.store_seeds)
     elif args.patient_list_path:
         lunas = Lunas(args.patient_list_path, args.output)
         lists = glob.glob(os.path.join(args.patient_list_path, "*.nii")) + glob.glob(
@@ -350,7 +355,7 @@ def main():
                     args.output, os.path.basename(patient_path).replace(".nii", "")
                 )
             ):
-                lunas.run(patient_path, only_seeds=args.only_seeds)
+                lunas.run(patient_path, store_seeds=args.only_seeds)
 
 
 if __name__ == "__main__":
