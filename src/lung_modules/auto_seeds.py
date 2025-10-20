@@ -495,7 +495,7 @@ class AutoSeeds:
     def run_external(self):
         thresh = self.highlight(0)
         axial_samples, _, z_samples = self.sampling(thresh, 2)
-        xy_seeds = self.seeds_by_area(axial_samples, (44, 1310), debug=True)
+        xy_seeds = self.seeds_by_area(axial_samples, (44, 1310))
         xy_ribs = self.check_seeds(xy_seeds, axial_samples, 2)
         xy_ribs = self.fix_orientation(xy_ribs)
         xyz_seeds = self.merge_xyz_seeds(xy_ribs, z_samples)

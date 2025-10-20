@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 import sys
 sys.path.append(os.getcwd())
-from lung_segmentation.modules.close_holes import CloseHoles
+from src.lung_modules.close_holes import CloseHoles
 
 @dataclass
 class SegregateLungParts:
