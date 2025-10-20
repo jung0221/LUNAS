@@ -18,7 +18,7 @@ namespace gft{
   namespace RegionCloud3{
 
     struct sRegionCloud3 {
-      sAdjRel3f *disp;  //displacement.
+      sAdjRel3 *disp;   // integer displacement.
       sScene32  **prob;
       int nobjs;
       int nimages;

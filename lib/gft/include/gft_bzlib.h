@@ -26,6 +26,10 @@
 extern "C" {
 #endif
 
+#if defined(_WIN32) && defined(small)
+#undef small
+#endif
+
 #define gft_BZ_RUN               0
 #define gft_BZ_FLUSH             1
 #define gft_BZ_FINISH            2

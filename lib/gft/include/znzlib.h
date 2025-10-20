@@ -49,12 +49,17 @@ extern "C" {
 
 /* include optional check for HAVE_FDOPEN here, from deleted config.h:
 
-   uncomment the following line if fdopen() exists for your compiler and
-   compiler options
+  uncomment the following line if fdopen() exists for your compiler and
+  compiler options
 */
 /* #define HAVE_FDOPEN */
 
-#ifndef HAVE_ZLIB
+/*
+  The build system may define ZLIB_NOT_FOUND when zlib isn't available.
+  Respect any existing HAVE_ZLIB definition, otherwise enable HAVE_ZLIB
+  only when zlib is expected (i.e., ZLIB_NOT_FOUND is NOT defined).
+*/
+#if !defined(HAVE_ZLIB) && !defined(ZLIB_NOT_FOUND)
 #define HAVE_ZLIB
 #endif
 

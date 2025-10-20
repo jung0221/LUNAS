@@ -1,5 +1,7 @@
 
 #include "fuzzycloud3.h"
+#include "gft_segmentation3.h"
+#include "gft_compat.h"
 
 
 namespace gft{
@@ -74,11 +76,11 @@ namespace gft{
       }
       
       //Create RegionCloud3:
-      rcloud = (RegionCloud3 *)calloc(1,sizeof(RegionCloud3));
+	rcloud = (sRegionCloud3 *)calloc(1,sizeof(sRegionCloud3));
       if(rcloud==NULL) 
 	gft::Error((char *)MSG1,
 		   (char *)"RegionCloud3::ByLabelList");
-      rcloud->prob = (Scene **)calloc(Lmax+1,sizeof(Scene *));
+	rcloud->prob = (sScene32 **)calloc(Lmax+1,sizeof(sScene32 *));
       if(rcloud->prob==NULL) 
 	gft::Error((char *)MSG1,
 		   (char *)"RegionCloud3::LabelList");
@@ -98,9 +100,9 @@ namespace gft{
 	(rcloud->fdisp)->dy[l] = sum_y/(float)nimages;
 	(rcloud->fdisp)->dz[l] = sum_z/(float)nimages;
 	
-	(rcloud->disp)->dx[l] = ROUND(sum_x/(float)nimages);
-	(rcloud->disp)->dy[l] = ROUND(sum_y/(float)nimages);
-	(rcloud->disp)->dz[l] = ROUND(sum_z/(float)nimages);
+    	(rcloud->disp)->d[l].axis.x = ROUND(sum_x/(float)nimages);
+    	(rcloud->disp)->d[l].axis.y = ROUND(sum_y/(float)nimages);
+    	(rcloud->disp)->d[l].axis.z = ROUND(sum_z/(float)nimages);
 	
 	Sx = Sy = Sz = 0;
 	for(i=0; i<nimages; i++){
@@ -214,11 +216,11 @@ namespace gft{
       nobjs = rcloud->nobjs;
       
       //Create RegionCloud3:
-      sub = (sRegionCloud3 *)calloc(1,sizeof(sRegionCloud3));
+	sub = (sRegionCloud3 *)calloc(1,sizeof(sRegionCloud3));
       if(sub==NULL) 
 	gft::Error((char *)MSG1,
 		   (char *)"RegionCloud3::Subsampling");
-      sub->prob = (Scene32::Scene32 **)calloc(nobjs+1,sizeof(sScene32 *));
+	sub->prob = (sScene32 **)calloc(nobjs+1,sizeof(sScene32 *));
       if(sub->prob==NULL) 
 	gft::Error((char *)MSG1,
 		   (char *)"RegionCloud3::Subsampling");
@@ -232,9 +234,9 @@ namespace gft{
 	(sub->fdisp)->dy[l] = (rcloud->fdisp)->dy[l]/2.;
 	(sub->fdisp)->dz[l] = (rcloud->fdisp)->dz[l]/2.;
 	
-	(sub->disp)->dx[l] = ROUND((sub->fdisp)->dx[l]);
-	(sub->disp)->dy[l] = ROUND((sub->fdisp)->dy[l]);
-	(sub->disp)->dz[l] = ROUND((sub->fdisp)->dz[l]);
+	(sub->disp)->d[l].axis.x = ROUND((sub->fdisp)->dx[l]);
+	(sub->disp)->d[l].axis.y = ROUND((sub->fdisp)->dy[l]);
+	(sub->disp)->d[l].axis.z = ROUND((sub->fdisp)->dz[l]);
 	
 	tmp  = Scene32::AddFrame(rcloud->prob[l], 1, 0);
 	blur = FastGaussianBlur3(tmp);
@@ -255,11 +257,11 @@ namespace gft{
       nobjs = rcloud->nobjs;
       
       //Create RegionCloud3:
-      interp = (sRegionCloud3 *)calloc(1,sizeof(sRegionCloud3));
+	interp = (sRegionCloud3 *)calloc(1,sizeof(sRegionCloud3));
       if(interp==NULL) 
 	gft::Error((char *)MSG1,
 		   (char *)"RegionCloud3::LinearInterp");
-      interp->prob = (sScene **)calloc(nobjs+1,sizeof(sScene *));
+	interp->prob = (sScene32 **)calloc(nobjs+1,sizeof(sScene32 *));
       if(interp->prob==NULL) 
 	gft::Error((char *)MSG1,
 		   (char *)"RegionCloud3::LinearInterp");
@@ -276,9 +278,9 @@ namespace gft{
 	(interp->fdisp)->dy[l] = (rcloud->fdisp)->dy[l]*ody/dy;
 	(interp->fdisp)->dz[l] = (rcloud->fdisp)->dz[l]*odz/dz;
 	
-	(interp->disp)->dx[l] = ROUND((interp->fdisp)->dx[l]);
-	(interp->disp)->dy[l] = ROUND((interp->fdisp)->dy[l]);
-	(interp->disp)->dz[l] = ROUND((interp->fdisp)->dz[l]);
+	(interp->disp)->d[l].axis.x = ROUND((interp->fdisp)->dx[l]);
+	(interp->disp)->d[l].axis.y = ROUND((interp->fdisp)->dy[l]);
+	(interp->disp)->d[l].axis.z = ROUND((interp->fdisp)->dz[l]);
 	
 	interp->prob[l] = FastLinearInterpCentr3(rcloud->prob[l], 
 						 dx,dy,dz);
@@ -313,9 +315,9 @@ namespace gft{
 	(blur->fdisp)->dy[l] = (rcloud->fdisp)->dy[l];
 	(blur->fdisp)->dz[l] = (rcloud->fdisp)->dz[l];
 	
-	(blur->disp)->dx[l] = ROUND((blur->fdisp)->dx[l]);
-	(blur->disp)->dy[l] = ROUND((blur->fdisp)->dy[l]);
-	(blur->disp)->dz[l] = ROUND((blur->fdisp)->dz[l]);
+	(blur->disp)->d[l].axis.x = ROUND((blur->fdisp)->dx[l]);
+	(blur->disp)->d[l].axis.y = ROUND((blur->fdisp)->dy[l]);
+	(blur->disp)->d[l].axis.z = ROUND((blur->fdisp)->dz[l]);
 	
 	tmp = Scene32::AddFrame(rcloud->prob[l], 1, 0);
 	blur->prob[l] = Scene32::FastGaussianBlur(tmp);
@@ -347,9 +349,9 @@ namespace gft{
       lps->nimages = rcloud->nimages;
       
       for(l=1; l<=nobjs; l++){
-	(lps->disp)->dx[l] = ROUND((lps->fdisp)->dx[l]);
-	(lps->disp)->dy[l] = ROUND((lps->fdisp)->dy[l]);
-	(lps->disp)->dz[l] = ROUND((lps->fdisp)->dz[l]);
+	(lps->disp)->d[l].axis.x = ROUND((lps->fdisp)->dx[l]);
+	(lps->disp)->d[l].axis.y = ROUND((lps->fdisp)->dy[l]);
+	(lps->disp)->d[l].axis.z = ROUND((lps->fdisp)->dz[l]);
 	
 	lps->prob[l] = Scene32::ChangeOrientationToLPS(rcloud->prob[l], ori);
       }
@@ -392,9 +394,9 @@ namespace gft{
       fclose(fp);
       
       for(l=1; l<=nobjs; l++){
-	(rcloud->disp)->dx[l] = ROUND((rcloud->fdisp)->dx[l]);
-	(rcloud->disp)->dy[l] = ROUND((rcloud->fdisp)->dy[l]);
-	(rcloud->disp)->dz[l] = ROUND((rcloud->fdisp)->dz[l]);
+	(rcloud->disp)->d[l].axis.x = ROUND((rcloud->fdisp)->dx[l]);
+	(rcloud->disp)->d[l].axis.y = ROUND((rcloud->fdisp)->dy[l]);
+	(rcloud->disp)->d[l].axis.z = ROUND((rcloud->fdisp)->dz[l]);
 	
 	strcpy(tmp, filename);
 	FileList::RemoveFileExtension(tmp);
@@ -517,7 +519,7 @@ namespace gft{
       if(bcloud==NULL)
 	gft::Error((char *)MSG1,
 		   (char *)"BorderCloud3::ByRegionCloud");
-      bcloud->prob = (sScnGradient **)calloc(nobjs+1,sizeof(sScnGradient *));
+	bcloud->prob = (sGradient3 **)calloc(nobjs+1,sizeof(sGradient3 *));
       if(bcloud->prob==NULL)
 	gft::Error((char *)MSG1,
 		   (char *)"BorderCloud3::ByRegionCloud");
@@ -545,9 +547,9 @@ namespace gft{
 	
 	Scene32::Destroy(&prob);
 	Gradient3::Destroy(&grad);
-	(bcloud->disp)->dx[l] = (rcloud->disp)->dx[l];
-	(bcloud->disp)->dy[l] = (rcloud->disp)->dy[l];
-	(bcloud->disp)->dz[l] = (rcloud->disp)->dz[l];
+	(bcloud->disp)->d[l].axis.x = (rcloud->disp)->d[l].axis.x;
+	(bcloud->disp)->d[l].axis.y = (rcloud->disp)->d[l].axis.y;
+	(bcloud->disp)->d[l].axis.z = (rcloud->disp)->d[l].axis.z;
 	
 	(bcloud->fdisp)->dx[l] = (rcloud->fdisp)->dx[l];
 	(bcloud->fdisp)->dy[l] = (rcloud->fdisp)->dy[l];
@@ -613,9 +615,9 @@ namespace gft{
 	(sub->fdisp)->dy[l] = (bcloud->fdisp)->dy[l]/2.;
 	(sub->fdisp)->dz[l] = (bcloud->fdisp)->dz[l]/2.;
 	
-	(sub->disp)->dx[l] = ROUND((sub->fdisp)->dx[l]);
-	(sub->disp)->dy[l] = ROUND((sub->fdisp)->dy[l]);
-	(sub->disp)->dz[l] = ROUND((sub->fdisp)->dz[l]);
+	(sub->disp)->d[l].axis.x = ROUND((sub->fdisp)->dx[l]);
+	(sub->disp)->d[l].axis.y = ROUND((sub->fdisp)->dy[l]);
+	(sub->disp)->d[l].axis.z = ROUND((sub->fdisp)->dz[l]);
 	
 	sub->prob[l] = (sGradient3 *)calloc(1,sizeof(sGradient3));
 	if(sub->prob[l] == NULL)
@@ -668,9 +670,9 @@ namespace gft{
 	(interp->fdisp)->dy[l] = (bcloud->fdisp)->dy[l]*ody/dy;
 	(interp->fdisp)->dz[l] = (bcloud->fdisp)->dz[l]*odz/dz;
 
-	(interp->disp)->dx[l] = ROUND((interp->fdisp)->dx[l]);
-	(interp->disp)->dy[l] = ROUND((interp->fdisp)->dy[l]);
-	(interp->disp)->dz[l] = ROUND((interp->fdisp)->dz[l]);
+	(interp->disp)->d[l].axis.x = ROUND((interp->fdisp)->dx[l]);
+	(interp->disp)->d[l].axis.y = ROUND((interp->fdisp)->dy[l]);
+	(interp->disp)->d[l].axis.z = ROUND((interp->fdisp)->dz[l]);
 
 	interp->prob[l] = Gradient3::LinearInterpCentr(bcloud->prob[l], 
 						       dx,dy,dz);
@@ -698,9 +700,9 @@ namespace gft{
       lps->nobjs = bcloud->nobjs;
       
       for(l=1; l<=nobjs; l++){
-	(lps->disp)->dx[l] = ROUND((lps->fdisp)->dx[l]);
-	(lps->disp)->dy[l] = ROUND((lps->fdisp)->dy[l]);
-	(lps->disp)->dz[l] = ROUND((lps->fdisp)->dz[l]);
+	(lps->disp)->d[l].axis.x = ROUND((lps->fdisp)->dx[l]);
+	(lps->disp)->d[l].axis.y = ROUND((lps->fdisp)->dy[l]);
+	(lps->disp)->d[l].axis.z = ROUND((lps->fdisp)->dz[l]);
 	
 	lps->prob[l] = Gradient3::ChangeOrientationToLPS(bcloud->prob[l], ori);
       }
@@ -753,9 +755,9 @@ namespace gft{
       fclose(fp);
       
       for(l=1; l<=nobjs; l++){
-	(bcloud->disp)->dx[l] = ROUND((bcloud->fdisp)->dx[l]);
-	(bcloud->disp)->dy[l] = ROUND((bcloud->fdisp)->dy[l]);
-	(bcloud->disp)->dz[l] = ROUND((bcloud->fdisp)->dz[l]);
+	(bcloud->disp)->d[l].axis.x = ROUND((bcloud->fdisp)->dx[l]);
+	(bcloud->disp)->d[l].axis.y = ROUND((bcloud->fdisp)->dy[l]);
+	(bcloud->disp)->d[l].axis.z = ROUND((bcloud->fdisp)->dz[l]);
 	
 	strcpy(tmp, filename);
 	FileList::RemoveFileExtension(tmp);

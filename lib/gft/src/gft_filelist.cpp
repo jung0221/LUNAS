@@ -141,40 +141,73 @@ namespace gft{
 
 
     void AddFilesInDir(sFileList *L,
-		       char *dir){
+               char *dir){
+#if defined(_WIN32)
+      char pattern[1024];
+      WIN32_FIND_DATAA findData;
+      HANDLE hFind = INVALID_HANDLE_VALUE;
+      size_t s;
+
+      s = strlen(dir);
+      if(s>0 && (dir[s-1]=='/' || dir[s-1]=='\\'))
+        dir[s-1] = '\0';
+
+      sprintf(pattern, "%s\\*", dir);
+
+      hFind = FindFirstFileA(pattern, &findData);
+      if(hFind == INVALID_HANDLE_VALUE) {
+        // no files or directory doesn't exist
+        return;
+      }
+
+      do {
+        // skip '.' and '..'
+        if(strcmp(findData.cFileName, ".")==0 || strcmp(findData.cFileName, "..")==0)
+          continue;
+
+        char fullname[1024];
+        snprintf(fullname, sizeof(fullname), "%s/%s", dir, findData.cFileName);
+        // convert backslashes to forward slashes to keep API consistent
+        for(char *p = fullname; *p; ++p) if(*p == '\\') *p = '/';
+        AddFile(L, fullname);
+      } while(FindNextFileA(hFind, &findData) != 0);
+
+      FindClose(hFind);
+#else
       glob_t data;
       char pattern[1024];
       int s,i;
       
       s = strlen(dir);
       if(s>0)
-	if(dir[s-1]=='/')
-	  dir[s-1] = '\0';
+    if(dir[s-1]=='/')
+      dir[s-1] = '\0';
       
       sprintf(pattern,"%s/*",dir);
       
       switch( glob(pattern, GLOB_MARK, NULL, &data ) ){
       case 0:
-	break;
+    break;
       case GLOB_NOSPACE:
-	printf( "Out of memory\n" );
-	break;
+    printf( "Out of memory\n" );
+    break;
       case GLOB_ABORTED:
-	printf( "Reading error\n" );
-	break;
+    printf( "Reading error\n" );
+    break;
       case GLOB_NOMATCH:
-	printf( "No files found\n" );
-	break;
+    printf( "No files found\n" );
+    break;
       default:
-	break;
+    break;
       }
       
       for(i=0; i<(int)data.gl_pathc; i++){
-	AddFile(L, data.gl_pathv[i]);
-	//printf( "%s\n", data.gl_pathv[i] );
+    AddFile(L, data.gl_pathv[i]);
+    //printf( "%s\n", data.gl_pathv[i] );
       }
       
       globfree( &data );
+#endif
     }
     
     
