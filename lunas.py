@@ -114,59 +114,63 @@ class Lunas:
             right_ext_lung_seeds,
         )
 
-    def run_roift(self):
+    def run_roift(self, pol: float, dilperc: int, iters: int, as_stl:bool):
 
         # Trachea segmentation
-        self.logger.info(f"Performing segmentation for {self.patient_name} - Trachea")
         self.trachea_out_path = os.path.join(
             self.outputfolder,
             self.patient_name,
             f"1st_trachea_{self.patient_name}.nii.gz",
         )
         if not os.path.exists(self.trachea_out_path):
+            self.logger.info(f"Performing segmentation for {self.patient_name} - Trachea")
             print("[INFO] Performing Segmentation - Trachea")
             self.roift.run(
-                self.patient, self.trachea_seed_path, 0, 0, -1, 0, self.trachea_out_path
+                patient_path=self.patient, 
+                seed_path=self.trachea_seed_path, 
+                percentile=dilperc, 
+                nitter=iters, 
+                pol=pol,
+                as_stl=as_stl, 
+                out_path=self.trachea_out_path
             )
 
         # Left lung segmentation
-        self.logger.info(f"Performing segmentation for {self.patient_name} - Left Lung")
         self.left_lung_out_path = os.path.join(
             self.outputfolder,
             self.patient_name,
             f"1st_left_lung_{self.patient_name}.nii.gz",
         )
         if not os.path.exists(self.left_lung_out_path):
+            self.logger.info(f"Performing segmentation for {self.patient_name} - Left Lung")
             print("[INFO] Performing Segmentation - Left Lung")
             self.roift.run(
-                self.patient,
-                self.left_lung_seed_path,
-                0,
-                10,
-                -0.8,
-                0,
-                self.left_lung_out_path,
+                patient_path=self.patient,
+                seed_path=self.left_lung_seed_path,
+                percentile=dilperc, 
+                nitter=iters, 
+                pol=pol,
+                as_stl=as_stl, 
+                out_path=self.left_lung_out_path,
             )
 
         # Right lung segmentation
-        self.logger.info(
-            f"Performing segmentation for {self.patient_name} - Right Lung"
-        )
         self.right_lung_out_path = os.path.join(
             self.outputfolder,
             self.patient_name,
             f"1st_right_lung_{self.patient_name}.nii.gz",
         )
         if not os.path.exists(self.right_lung_out_path):
+            self.logger.info(f"Performing segmentation for {self.patient_name} - Right Lung")
             print("[INFO] Performing Segmentation - Right Lung")
             self.roift.run(
-                self.patient,
-                self.right_lung_seed_path,
-                0,
-                10,
-                -0.8,
-                0,
-                self.right_lung_out_path,
+                patient_path=self.patient,
+                seed_path=self.right_lung_seed_path,
+                percentile=dilperc, 
+                nitter=iters, 
+                pol=pol,
+                as_stl=as_stl, 
+                out_path=self.right_lung_out_path,
             )
 
     def filter_lung(self, left_ext_lung_seeds, right_ext_lung_seeds):
@@ -196,7 +200,7 @@ class Lunas:
             1,
         )
 
-    def run(self, patient_path, store_seeds=False):
+    def run(self, patient_path, store_seeds:bool, pol: float, dilperc: int, iters: int, as_stl:bool):
         self.patient = patient_path
         self.lunas_autoseeds = AutoSeeds(self.patient)
 
@@ -209,15 +213,13 @@ class Lunas:
                 self.right_ext_lung_seeds,
             ) = self.generate_seeds()
 
-            self.run_roift()
+            self.run_roift(pol, dilperc, iters, as_stl)
             print("[INFO] Removing temporary files")
             if not store_seeds:
                 seed_files = glob.glob(os.path.join(self.patient_output_dir, "*.txt"))
                 for file in seed_files:
                     os.remove(file)
-                
-                
-
+    
             return True
 
         except subprocess.CalledProcessError as e:
@@ -338,7 +340,7 @@ def main():
     if args.patient:
         inputfolder = os.path.dirname(args.patient)
         lunas = Lunas(inputfolder=inputfolder, outputfolder=args.output)
-        lunas.run(patient_path=args.patient, store_seeds=args.store_seeds)
+        lunas.run(patient_path=args.patient, store_seeds=args.store_seeds, pol=args.pol, dilperc=args.dilperc, iters=args.iters, as_stl=args.mesh)
     elif args.patient_list_path:
         lunas = Lunas(args.patient_list_path, args.output)
         lists = glob.glob(os.path.join(args.patient_list_path, "*.nii")) + glob.glob(
@@ -355,7 +357,7 @@ def main():
                     args.output, os.path.basename(patient_path).replace(".nii", "")
                 )
             ):
-                lunas.run(patient_path, store_seeds=args.only_seeds)
+                lunas.run(patient_path, store_seeds=args.store_seeds, pol=args.pol, dilperc=args.dilperc, iters=args.iters)
 
 
 if __name__ == "__main__":
