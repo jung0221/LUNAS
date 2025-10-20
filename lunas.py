@@ -316,9 +316,8 @@ def main():
     group.add_argument("--patient", help="Nifti file path")
     group.add_argument("--patient-list-path", help="Folder containing Nifti files")
     group.add_argument("--metadata-path", help="Segment using metadata file (csv)")
-    parser.add_argument(
-        "--mesh", required=False, default="0", help="Create mesh (1) or not (0)"
-    )
+    parser.add_argument("--mesh", action="store_true", help="Store seeds file")
+    parser.add_argument("--store-seeds", action="store_true", help="Store seeds file")
     parser.add_argument(
         "--output",
         default="lunas_output",
@@ -333,7 +332,6 @@ def main():
     parser.add_argument(
         "--iters", type=int, default=10, help="Number of iterations (default: 10)"
     )
-    parser.add_argument("--store-seeds", action="store_true", help="Store seeds file")
 
     args = parser.parse_args()
 
