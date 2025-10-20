@@ -1,5 +1,5 @@
-# cmake build folder
 /build
-
-# lunas output
 /lunas_output
+
+*.pyc
+*.log
